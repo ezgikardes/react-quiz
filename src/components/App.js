@@ -1,4 +1,3 @@
-import { useContext, useEffect, useReducer } from "react";
 import Header from "./Header";
 import Main from "./Main";
 import Loader from "./Loader";
@@ -10,23 +9,10 @@ import Progress from "./Progress";
 import FinishScreen from "./FinishScreen";
 import Timer from "./Timer";
 import Footer from "./Footer";
-import { QuizContext } from "../contexts/QuizContext";
+import { useQuiz } from "../contexts/QuizContext";
 
 function App() {
-  const { questions, status, dispatch } = useContext(QuizContext);
-
-  const numQuestions = questions.length;
-  const maxPossiblePoints = questions.reduce(
-    (prev, cur) => prev + cur.points,
-    0
-  );
-
-  useEffect(function () {
-    fetch("http://localhost:8000/questions")
-      .then((res) => res.json())
-      .then((data) => dispatch({ type: "dataReceived", payload: data }))
-      .catch((err) => dispatch({ type: "dataFailed" }));
-  }, []);
+  const { status } = useQuiz();
 
   return (
     <div className="app">
@@ -35,24 +21,19 @@ function App() {
       <Main>
         {status === "loading" && <Loader />}
         {status === "error" && <Error />}
-        {status === "ready" && <StartScreen numQuestions={numQuestions} />}
+        {status === "ready" && <StartScreen />}
         {status === "active" && (
           <>
-            <Progress
-              numQuestions={numQuestions}
-              maxPossiblePoints={maxPossiblePoints}
-            />
+            <Progress />
             <Question />
             <Footer>
               <Timer />
-              <NextButton numQuestions={numQuestions} />
+              <NextButton />
             </Footer>
           </>
         )}
 
-        {status === "finished" && (
-          <FinishScreen maxPossiblePoints={maxPossiblePoints} />
-        )}
+        {status === "finished" && <FinishScreen />}
       </Main>
     </div>
   );

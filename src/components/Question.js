@@ -1,9 +1,8 @@
-import { useContext } from "react";
 import Options from "./Options";
-import { QuizContext } from "../contexts/QuizContext";
+import { useQuiz } from "../contexts/QuizContext";
 
 function Question() {
-  const { questions, index, dispatch, answer } = useContext(QuizContext);
+  const { questions, index, dispatch, answer } = useQuiz();
 
   const question = questions[index];
 

@@ -1,8 +1,7 @@
-import { useContext } from "react";
-import { QuizContext } from "../contexts/QuizContext";
+import { useQuiz } from "../contexts/QuizContext";
 
-function StartScreen({ numQuestions }) {
-  const { dispatch } = useContext(QuizContext);
+function StartScreen() {
+  const { dispatch, numQuestions } = useQuiz();
 
   return (
     <div className="start">
